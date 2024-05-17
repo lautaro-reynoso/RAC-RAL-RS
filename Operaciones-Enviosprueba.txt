@@ -1,0 +1,67 @@
+1
+AA1
+21644952
+Anibal Sanchez Reulet
+LOS CEIBOS 10
+13561786
+Domingo F. Sarmiento
+2020-03-02
+2020-03-17
+1
+AA2
+21644952
+Anibal Sanchez Reulet
+LOS CEIBOS 10
+13561786
+Domingo F. Sarmiento
+2020-03-02
+2020-03-17
+1
+AA3
+21644952
+Anibal Sanchez Reulet
+LOS CEIBOS 10
+13561786
+Domingo F. Sarmiento
+2020-03-02
+2020-03-17
+1
+AA4
+21644952
+Anibal Sanchez Reulet
+LOS CEIBOS 10
+13561786
+Domingo F. Sarmiento
+2020-03-02
+2020-03-17
+1
+AA5
+21644952
+Anibal Sanchez Reulet
+LOS CEIBOS 10
+13561786
+Domingo F. Sarmiento
+2020-03-02
+2020-03-17
+1
+AA6
+34566593
+Fernando Schwarz
+DORREGO Y SAN LUIS 10
+20205808
+Jose Figueroa Alcorta
+2020-03-11
+2020-03-26
+1
+AA7
+26073688
+Juan Jose Sebreli
+RIVADAVIA NORTE 11367
+38451852
+Roque Saenz Pena
+2020-03-12
+2020-03-27
+3
+AA2
+
+

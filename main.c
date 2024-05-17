@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "RAC.h"
 #include "Envios.h"
 
 
@@ -15,9 +16,9 @@ void mostrarestructura();
 void mostrarSubmenu() {
 
     printf("--Submenu--\n");
-    printf("1. Mostrar Lista Invertida con busqueda por Triseccion (LIBT).\n");
-    printf("2. Mostrar Lista Secuencial con Busqueda Binaria (LSOBB)\n");
-    printf("3. Mostrar Arbol Binario de Busqueda (ABB)\n");
+    printf("1. REBALSE ABIERTO CUADRATICO.\n");
+    printf("2. REBALSE ABIERTO LINEAL\n");
+    printf("3. REBALSE SEPARADO\n");
     printf("4. Volver al Menu Principal\n");
 }
 
@@ -38,10 +39,10 @@ int main() {
     // Crea las estructuras de datos (LSO, ABB) aqu�
 
     int opcion, submenu_opcion;
+    RAC rac;
 
-
-
-
+    initializeRAC(&rac);
+    LecturaOperaciones(&rac);
     do {
         // Men� principal
 
@@ -55,7 +56,7 @@ int main() {
                 system("cls");
 
 
-                LecturaOperaciones();
+
 
                 printf("\t AltaMax | AltaMed | BajaMax | BajaMed | Max.Ev.Ex | Med.Ev.Ex | Max.Ev.Fr | Med.Ev.Fr|\n");
                 printf("-----------------------------------------------------------------------------------------------\n");
@@ -80,18 +81,18 @@ int main() {
                         case 1:
                             system("cls");
 
-                            printf("Lista Invertida con Busqueda Triseccion:\n");
-
+                            printf("REBALSE ABIERTO CUADRATICO:\n");
+                            printRAC(rac);
                             break;
                         case 2:
                             system("cls");
-                            printf("Lista Secuencial Ordenada con Busqueda Binaria (LSOBB):\n");
+                            printf(" REBALSE ABIERTO LINEAL:\n");
 
 
                             break;
                         case 3:
                             system("cls");
-                            printf("Arbol Binario de Busqueda (orden ascendente):\n");
+                            printf("REBALSE SEPARADO:\n");
                             int contadorarbol = 0;
 
 
@@ -120,7 +121,7 @@ int main() {
     return 0;
 }
 
-int LecturaOperaciones() {
+int LecturaOperaciones(RAC *rac) {
 
     // Declaraciones e inicializaciones
     int evocar = 0, contador = 0;
@@ -148,7 +149,7 @@ int LecturaOperaciones() {
         printf("No se pudo abrir el archivo\n");
         return 1;
     } else {
-        printf("enbtro");
+        printf("ARCHIVO ABIERTO CON EXITO\n");
         int codigoOperador = 0, i;
 
 
@@ -185,12 +186,23 @@ int LecturaOperaciones() {
 
                 // Llama a la funci�n correspondiente para alta o baja en las estructuras
                 if (codigoOperador == 1) {
-                    //  mostrarenvio(aux);
+
+
+                        altaRAC(rac, aux);
+
+
 
 
 
                 }
                 if (codigoOperador == 2) {
+                    bajaRAC(rac,aux);
+
+                      //  if ((bajaRAC(rac,aux)) == 1){
+                         //   printf("yes");
+                       // }
+                            //printf("no");
+
 
 
 

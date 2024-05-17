@@ -8,10 +8,10 @@
 typedef struct{
     Envio envios[MAXRAC];
     int cant;
-}rac;
+}RAC;
 
 
-void initializeRAC (rac *rac){
+void initializeRAC (RAC *rac){
     int i;
     for ( i = 0; i < MAXRAC; i++)
     {
@@ -22,7 +22,7 @@ void initializeRAC (rac *rac){
 }
 
 
-int localizarRAC(rac *rac, char code[], int *pos, float *celdasConsult)
+int localizarRAC(RAC *rac, char code[], int *pos, float *celdasConsult)
 {
     int i = hashing(code, MAXRAC), cont=0, celdaLibre = -1, p = 1, costosAux = 0;
 
@@ -59,7 +59,7 @@ int localizarRAC(rac *rac, char code[], int *pos, float *celdasConsult)
 }
 
 
-int altaRAC (rac *rac, Envio envios)
+int altaRAC (RAC *rac, Envio envios)
 {
     int pos;
     float celdasConsult = 0.0;
@@ -76,7 +76,7 @@ int altaRAC (rac *rac, Envio envios)
 }
 
 
-int bajaRAC (rac *rac, Envio envios){
+int bajaRAC (RAC *rac, Envio envios){
     int pos, confirm;
     float celdas_consultadas=0.0;
    if(localizarRAC(rac,envios.codigo,&pos,&celdas_consultadas)==0){ //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
@@ -93,7 +93,7 @@ int bajaRAC (rac *rac, Envio envios){
     }
 }
 
-int evocarRAC(rac *rac, char code[] ,Envio *envios, float* costo){
+int evocarRAC(RAC *rac, char code[] ,Envio *envios, float* costo){
     int pos;
     float costosAux=0.0;
     if ( localizarRAC(rac,code,&pos,&costosAux) == 0){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
@@ -115,7 +115,7 @@ int evocarRAC(rac *rac, char code[] ,Envio *envios, float* costo){
 }
 
 //MOSTRAR
-void printRAC (rac rac){
+void printRAC (RAC rac){
     int i = 0;
         for (i=0; i < MAXRAC ; i++) {
              if(strcmp(rac.envios[i].codigo,LIBRE)==0){
