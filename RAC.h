@@ -10,7 +10,7 @@ typedef struct{
     int cant;
 }rac;
 
-//INICIALIZAR
+
 void initializeRAC (rac *rac){
     int i;
     for ( i = 0; i < MAXRAC; i++)
@@ -21,7 +21,7 @@ void initializeRAC (rac *rac){
 
 }
 
-//LOCALIZAR
+
 int localizarRAC(rac *rac, char code[], int *pos, float *celdasConsult)
 {
     int i = hashing(code, MAXRAC), cont=0, celdaLibre = -1, p = 1, costosAux = 0;
@@ -58,7 +58,7 @@ int localizarRAC(rac *rac, char code[], int *pos, float *celdasConsult)
         }
 }
 
-//ALTA
+
 int altaRAC (rac *rac, Envio envios)
 {
     int pos;
@@ -75,7 +75,7 @@ int altaRAC (rac *rac, Envio envios)
             }
 }
 
-//BAJA
+
 int bajaRAC (rac *rac, Envio envios){
     int pos, confirm;
     float celdas_consultadas=0.0;
@@ -92,25 +92,25 @@ int bajaRAC (rac *rac, Envio envios){
         }
     }
 }
-//EVOCAR
+
 int evocarRAC(rac *rac, char code[] ,Envio *envios, float* costo){
     int pos;
     float costosAux=0.0;
-    if ( localizarRAC(rac,code,&pos,&costosAux) == FAILURE){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
+    if ( localizarRAC(rac,code,&pos,&costosAux) == 0){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
         (*costo) = costosAux;
-        return FAILURE;
+        return 0;
     }else{
         strcpy(envios->codigo, rac->envios[pos].codigo);
         envios->dni_remitente = rac->envios[pos].dni_receptor;
-        strcpy(envios->receiver.fullName, rac->envios[pos].receiver.fullName);
-        strcpy(envios->receiverAddress, rac->envios[pos].receiverAddress);
-        envios->sender.dni = rac->envios[pos].sender.dni;
-        strcpy(envios->sender.fullName, rac->envios[pos].sender.fullName);
-        envios->sender.dni = rac->envios[pos].sender.dni;
-        strcpy(envios->sendingDate, rac->envios[pos].sendingDate);
-        strcpy(envios->receptionDate, rac->envios[pos].receptionDate);
+        strcpy(envios->nombre_r, rac->envios[pos].nombre_r);
+        strcpy(envios->direccion, rac->envios[pos].direccion);
+        envios->dni_remitente = rac->envios[pos].dni_remitente;
+        strcpy(envios->nombre, rac->envios[pos].nombre);
+        envios->dni_remitente = rac->envios[pos].dni_remitente;
+        strcpy(envios->fecha_envio, rac->envios[pos].fecha_envio);
+        strcpy(envios->fecha_recepcion, rac->envios[pos].fecha_recepcion);
         (*costo) = costosAux;
-        return SUCCESS;
+        return 1;
     }
 }
 
@@ -118,13 +118,13 @@ int evocarRAC(rac *rac, char code[] ,Envio *envios, float* costo){
 void printRAC (rac rac){
     int i = 0;
         for (i=0; i < MAXRAC ; i++) {
-             if(strcmp(rac.shipments[i].code,LIBRE)==0){
+             if(strcmp(rac.envios[i].codigo,LIBRE)==0){
             printf("\t--------------------------------------");
             printf("\n\tElemento N #%d de %d \n", i, MAXRAC);
             printf("\tCELDA LIBRE +\n");
             printf("\t--------------------------------------\n\n");
         }
-        else if(strcmp(rac.shipments[i].code, VIRGEN)==0){
+        else if(strcmp(rac.envios[i].codigo, VIRGEN)==0){
             printf("\n\t--------------------------------------");
             printf("\n\tElemento N #%d de %d \n", i, MAXRAC);
             printf("\tCELDA VIRGEN *\n");
@@ -133,7 +133,7 @@ void printRAC (rac rac){
          else {
                  printf("\n\t--------------------------------------");
                     printf("\n\tElemento N #%d de %d\n", i, MAXRAC);
-                    printShipment(rac.shipments[i]);
+                    mostrarenvio(rac.envios[i]);
                     printf("\t--------------------------------------\n");
             }
             if ((i+1) % 5 == 0) system("pause");
