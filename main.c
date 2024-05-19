@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "RAC.h"
+#include "RAL.h"
 #include "Envios.h"
 
 
@@ -40,9 +41,11 @@ int main() {
 
     int opcion, submenu_opcion;
     RAC rac;
+    RAL ral;
 
+    initializeRAL(&ral);
     initializeRAC(&rac);
-    LecturaOperaciones(&rac);
+    LecturaOperaciones(&rac,&ral);
     do {
         // Men� principal
 
@@ -87,7 +90,7 @@ int main() {
                         case 2:
                             system("cls");
                             printf(" REBALSE ABIERTO LINEAL:\n");
-
+                            printRAL(ral);
 
                             break;
                         case 3:
@@ -121,7 +124,7 @@ int main() {
     return 0;
 }
 
-int LecturaOperaciones(RAC *rac) {
+int LecturaOperaciones(RAC *rac, RAL *ral) {
 
     // Declaraciones e inicializaciones
     int evocar = 0, contador = 0;
@@ -187,8 +190,9 @@ int LecturaOperaciones(RAC *rac) {
                 // Llama a la funci�n correspondiente para alta o baja en las estructuras
                 if (codigoOperador == 1) {
 
+                    altaRAC(rac, aux);
+                    altaRAL(ral,aux);
 
-                        altaRAC(rac, aux);
 
 
 
@@ -196,12 +200,10 @@ int LecturaOperaciones(RAC *rac) {
 
                 }
                 if (codigoOperador == 2) {
-                    bajaRAC(rac,aux);
 
-                      //  if ((bajaRAC(rac,aux)) == 1){
-                         //   printf("yes");
-                       // }
-                            //printf("no");
+                    bajaRAC(rac,aux);
+                    bajaRAL(ral,aux);
+
 
 
 

@@ -34,6 +34,7 @@ int hashing( char* x, int M) {
     for ( i = 0; i < longitud ; i++ )
         contador +=( (int)x[i] ) * ( i+1 );
     return ( contador % M ) ;
+
 }
 
 void mostrarenvio (Envio envio){
@@ -47,6 +48,20 @@ void mostrarenvio (Envio envio){
     printf("Fecha recepcion: %s\n", envio.fecha_recepcion);
     printf("Nombre receptor: %s\n\n", envio.nombre_r);
 
+}
+
+int compararenvios (Envio envio1,Envio envio2){
+    if((strcmp(envio1.direccion , envio2.direccion)==0)
+    && (envio1.dni_receptor == envio2.dni_receptor)
+    && (envio1.dni_remitente == envio2.dni_remitente)
+    && (strcmp(envio1.fecha_envio,envio2.fecha_envio)==0)
+    && (strcmp(envio1.fecha_recepcion,envio2.fecha_recepcion)==0)
+    && (strcmp(envio1.nombre,envio2.nombre)==0)
+    && (strcmp(envio1.nombre_r,envio2.nombre_r)==0)){
+        return 1;
+    }
+
+    return 0;
 }
 
 #endif //UNTITLED_ENVIOS_H
