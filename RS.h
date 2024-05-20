@@ -63,22 +63,21 @@ int LocalizeRs(RS *rs, int *j, char *code, float *costo){
 }
 
 
-void insertl(lista_de_envios *lista, Envio a) {
-    Nodo *nuevo = (Nodo *)malloc(sizeof(Nodo));
-    if (nuevo == NULL) {
-        perror("Error al asignar memoria");
-        exit(EXIT_FAILURE);
+void insertl(lista_de_envios *l, Envio a){
+    Nodo *p;
+    p=(Nodo*)malloc(sizeof(Nodo));
+    if ((*l).cur == (*l).acc){
+        (*p).vipd=a;
+        (*p).ps=(*l).cur;
+        (*l).acc=p;
+        (*l).cur=p;
     }
-
-    nuevo->vipd = a;
-    nuevo->ps = lista->cur;
-    lista->cur = nuevo;
-
-    if (lista->acc == NULL) {
-        lista->acc = nuevo;
-    }
-}
-
+    else{
+        (*p).vipd=a;
+        (*p).ps=(*l).cur;
+        (*l).aux->ps=p;
+        (*l).cur=p;
+    };}
 
 
 
@@ -92,7 +91,7 @@ int altaRS(RS *rs, Envio a){
     if(LocalizeRs(rs,&i,a.codigo,&costos)==1)
         return 0;
 
-    insertl(&rs->envios[i],a);
+
 
      Nodo *p;
     p=(Nodo*)malloc(sizeof(Nodo));
