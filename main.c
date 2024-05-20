@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include "RAC.h"
 #include "RAL.h"
+#include "RS.h"
 #include "Envios.h"
 
 
@@ -37,15 +38,17 @@ char *Mayusculas(char string[]) {
 
 
 int main() {
-    // Crea las estructuras de datos (LSO, ABB) aqu�
+
 
     int opcion, submenu_opcion;
     RAC rac;
     RAL ral;
+ RS rs;
 
     initializeRAL(&ral);
     initializeRAC(&rac);
-    LecturaOperaciones(&rac,&ral);
+    initializeRS(&rs);
+    LecturaOperaciones(&rac,&ral,&rs);
     do {
         // Men� principal
 
@@ -96,8 +99,8 @@ int main() {
                         case 3:
                             system("cls");
                             printf("REBALSE SEPARADO:\n");
-                            int contadorarbol = 0;
 
+                            printRS(&rs);
 
                             break;
                         case 4:
@@ -124,7 +127,7 @@ int main() {
     return 0;
 }
 
-int LecturaOperaciones(RAC *rac, RAL *ral) {
+int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
 
     // Declaraciones e inicializaciones
     int evocar = 0, contador = 0;
@@ -193,7 +196,7 @@ int LecturaOperaciones(RAC *rac, RAL *ral) {
                     altaRAC(rac, aux);
                     altaRAL(ral,aux);
 
-
+                    altaRS(rs,aux);
 
 
 
@@ -206,7 +209,7 @@ int LecturaOperaciones(RAC *rac, RAL *ral) {
 
 
 
-
+                    bajaRS(rs,aux);
 
 
                 }

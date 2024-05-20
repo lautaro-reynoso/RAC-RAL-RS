@@ -1,7 +1,7 @@
-
-
+#ifndef RS_H_INCLUDED
+#define RS_H_INCLUDED
 #include "Envios.h"
-#define MAXRS 207 //p=1.45 por lo que el resultado es techo(206.8965)=207 y no hace falta acercarlo al numero primo mas cercano
+#define MAXRS 37 //p=1.45 por lo que el resultado es techo(206.8965)=207 y no hace falta acercarlo al numero primo mas cercano
 
 struct nodo{
 Envio vipd;
@@ -17,9 +17,9 @@ typedef struct{
     lista_de_envios envios[MAXRS];
     int cant;
     int indicador[MAXRS];
-}rs;
+}RS;
 
-void initializeRS(rs *rs){
+void initializeRS(RS *rs){
     int i;
     for (i=0;i<MAXRS;i++){
         //init(&rs->ships[i]);
@@ -39,7 +39,7 @@ void initializeRS(rs *rs){
     rs->cant=0;
 }
 
-int LocalizeRs(rs *rs, int *j, char *code, float *costo){
+int LocalizeRs(RS *rs, int *j, char *code, float *costo){
 
     int i=hashing(code,MAXRS);
     (*j)=i;
@@ -62,7 +62,28 @@ int LocalizeRs(rs *rs, int *j, char *code, float *costo){
         return 0;
 }
 
-int altaRS(rs *rs, Envio a){
+
+void insertl(lista_de_envios *lista, Envio a) {
+    Nodo *nuevo = (Nodo *)malloc(sizeof(Nodo));
+    if (nuevo == NULL) {
+        perror("Error al asignar memoria");
+        exit(EXIT_FAILURE);
+    }
+
+    nuevo->vipd = a;
+    nuevo->ps = lista->cur;
+    lista->cur = nuevo;
+
+    if (lista->acc == NULL) {
+        lista->acc = nuevo;
+    }
+}
+
+
+
+
+
+int altaRS(RS *rs, Envio a){
     if (rs->cant==MAXRS)
         return 0;
 
@@ -71,7 +92,8 @@ int altaRS(rs *rs, Envio a){
     if(LocalizeRs(rs,&i,a.codigo,&costos)==1)
         return 0;
 
-    //insertl(&rs->ships[i],a);
+    insertl(&rs->envios[i],a);
+
      Nodo *p;
     p=(Nodo*)malloc(sizeof(Nodo));
     if (rs->envios[i].cur == rs->envios[i].acc){
@@ -91,7 +113,11 @@ else{
     return 1;
 }
 
-int bajaRS(rs *rs, Envio a){
+
+
+
+
+int bajaRS(RS *rs, Envio a){
     if (rs->cant==0)
         return 0;
 
@@ -100,7 +126,7 @@ int bajaRS(rs *rs, Envio a){
     if(LocalizeRs(rs,&i,a.codigo,&costos)==0)
         return 0;
 
-    //supress(&rs->ships[i]);
+
     if (rs->envios[i].acc == rs->envios[i].cur){
         rs->envios[i].acc = rs->envios[i].cur->ps;
         rs->envios[i].aux=rs->envios[i].cur->ps;
@@ -118,7 +144,7 @@ int bajaRS(rs *rs, Envio a){
 
 }
 
-int evocarRS(rs *rs, Envio a, float *costo, Envio *aux){
+int evocarRS(RS *rs, Envio a, float *costo, Envio *aux){
     if(rs->cant==0)
         return 0;
 
@@ -126,16 +152,56 @@ int evocarRS(rs *rs, Envio a, float *costo, Envio *aux){
     float costos=0.0;
 
     if(LocalizeRs(rs,&i,a.codigo,&costos)==0){
-        *costo=costos;
+
         return 0;
     } else {
-        *costo=costos;
+
         return 1;
     }
 
 
 
 }
+void printRS(RS *rs) {
+    for (int i = 0; i < MAXRS; ++i) {
+        printf("Balde N %d:\n", i + 1);
+        Nodo *current = rs->envios[i].acc;
+        int count = 1;  // Contador para elementos dentro de la lista
+        while (current != NULL) {
+            if (strcmp(current->vipd.codigo, LIBRE) == 0) {
+                printf("\t--------------------------------------");
+                printf("\n\tElemento N #%d de balde %d \n", count, i+1);
+                printf("\tCELDA LIBRE +\n");
+                printf("\t--------------------------------------\n\n");
+            } else if (strcmp(current->vipd.codigo, VIRGEN) == 0) {
+                printf("\n\t--------------------------------------");
+                printf("\n\tElemento N #%d de balde %d \n", count, i+1);
+                printf("\tCELDA VIRGEN *\n");
+                printf("\t--------------------------------------\n\n");
+            } else {
+                printf("\n\t--------------------------------------");
+                printf("\n\tElemento N #%d de balde %d\n", count, i+1);
+                mostrarenvio(current->vipd);
+                printf("\t--------------------------------------\n");
+            }
+
+            if (count % 5 == 0) {
+                printf("Presiona Enter para continuar...\n");
+                getchar();  // Pausa, espera a que el usuario presione Enter
+            }
+
+            current = current->ps;
+            count++;
+        }
+    }
+}
 
 
-//#endif // RS_H_INCLUDED
+
+
+
+
+
+
+
+#endif // RAL_H_INCLUDED

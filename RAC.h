@@ -95,7 +95,7 @@ int bajaRAC(RAC *rac, Envio envio) {
             rac->cant--;
             return 1;
         } else {
-            return 0; //FRACASO, NO SON IGUALES
+            return 2; //FRACASO, NO SON IGUALES
 
         }
     }
@@ -129,17 +129,17 @@ int bajaRAC(RAC *rac, Envio envio) {
         for (i = 0; i < MAXRAC; i++) {
             if (strcmp(rac.envios[i].codigo, LIBRE) == 0) {
                 printf("\t--------------------------------------");
-                printf("\n\tElemento N #%d de %d \n", i, MAXRAC);
+                printf("\n\tElemento N #%d de %d \n", i+1, MAXRAC);
                 printf("\tCELDA LIBRE +\n");
                 printf("\t--------------------------------------\n\n");
             } else if (strcmp(rac.envios[i].codigo, VIRGEN) == 0) {
                 printf("\n\t--------------------------------------");
-                printf("\n\tElemento N #%d de %d \n", i, MAXRAC);
+                printf("\n\tElemento N #%d de %d \n", i+1, MAXRAC);
                 printf("\tCELDA VIRGEN *\n");
                 printf("\t--------------------------------------\n\n");
             } else {
                 printf("\n\t--------------------------------------");
-                printf("\n\tElemento N #%d de %d\n", i, MAXRAC);
+                printf("\n\tElemento N #%d de %d\n", i+1, MAXRAC);
                 mostrarenvio(rac.envios[i]);
                 printf("\t--------------------------------------\n");
             }

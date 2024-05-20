@@ -81,7 +81,7 @@ int altaRAL(RAL *ral, Envio envio)
 //BAJA
 
 int bajaRAL (RAL *lista, Envio envio) {
-    printf("baja RAL");
+
     int pos, confirm;
     float celdas_consultadas = 0.0;
     if (localizarRAL(lista, envio.codigo, &pos, &celdas_consultadas) == 0) { //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
@@ -139,19 +139,19 @@ void printRAL (RAL ral){
     for (i=0; i < MAXRAL ; i++) {
         if(strcmp(ral.envios[i].codigo,LIBRE)==0){
             printf("\t--------------------------------------");
-            printf("\n\tElemento N #%d de %d \n", i, MAXRAL);
+            printf("\n\tElemento N #%d de %d \n", i+1, MAXRAL);
             printf("\tCELDA LIBRE +\n");
             printf("\t--------------------------------------\n\n");
         }
         else if(strcmp(ral.envios[i].codigo, VIRGEN)==0){
             printf("\n\t--------------------------------------");
-            printf("\n\tElemento N #%d de %d \n", i, MAXRAL);
+            printf("\n\tElemento N #%d de %d \n", i+1, MAXRAL);
             printf("\tCELDA VIRGEN *\n");
             printf("\t--------------------------------------\n\n");
         }
         else {
             printf("\n\t--------------------------------------");
-            printf("\n\tElemento N #%d de %d\n", i, MAXRAL);
+            printf("\n\tElemento N #%d de %d\n", i+1, MAXRAL);
             mostrarenvio(ral.envios[i]);
             printf("\t--------------------------------------\n");
         }
