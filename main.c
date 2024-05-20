@@ -64,13 +64,13 @@ int main() {
 
 
 
-                printf("\t AltaMax | AltaMed | BajaMax | BajaMed | Max.Ev.Ex | Med.Ev.Ex | Max.Ev.Fr | Med.Ev.Fr|\n");
+                printf("\t Acum Ev.Ex | Max.Ev.Ex | Med.Ev.Ex |Acum Ev.Ex | Max.Ev.Fr | Med.Ev.Fr|\n");
                 printf("-----------------------------------------------------------------------------------------------\n");
-                printf("LIBT :: %.2f   |   %.2f |  %.2f  |  %.2f    |    %d    |   %.2f     |   %d     |   %.2f    | \n");
+                printf("RAL ::   |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",ral.tempe, ral.eExMax, ral.eExMed ,ral.tempef ,ral.eFrMax , ral.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
-                printf("LSOBB :: %.2f   |   %.2f |  %.2f  |  %.2f  |    %.2f   |   %.2f    |   %.2f    |   %.2f   | \n");
+                printf("RAC ::   |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",rac.tempe, rac.eExMax, rac.eExMed ,rac.tempef ,rac.eFrMax , rac.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
-                printf("ABB   ::  %.2f   |    %.2f |   %.2f  |   %.2f  |   %.2f   |   %.2f    |  %.2f    |   %.2f   | \n");
+           //     printf("RS   ::  |   %.2f   |   %.2f    |  %.2f    |   %.2f   | \n");
                 printf("-----------------------------------------------------------------------------------------------\n");
 
 
@@ -148,7 +148,7 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
 
     // Concatenar la ruta del archivo al directorio actual
     char filepath[1024];
-    snprintf(filepath, sizeof(filepath), "%s\\%s", cwd, "../Operaciones-Envios.txt");
+    snprintf(filepath, sizeof(filepath), "%s\\%s", cwd, "/Operaciones-Envios.txt");
 
     // Intentar abrir el archivo en modo lectura
     if ((fp = fopen(filepath, "r")) == NULL) {
@@ -218,6 +218,8 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
 
                 evocar++;
 
+               evocarRAL(ral,aux.codigo, &aux2);
+             evocarRAC(rac,aux.codigo, &aux2);
                 int exito = 0;
 
 

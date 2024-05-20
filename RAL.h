@@ -8,10 +8,25 @@
 typedef struct{
     Envio envios[MAXRAL];
     int cant;
+
+
+    float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant,costoEvoE,costoEvoF,tempe,tempef;
+
+
 }RAL;
 
 
 void initializeRAL (RAL *ral){
+    ral->eExCant = 0.0;
+    ral->eExMax =0.0;
+    ral->eExMed =0.0;
+     ral->eFrMax  =0.0;
+     ral->eFrMed  =0.0;
+     ral->eFrCant =0.0;
+       ral->costoEvoE =0.0;
+       ral->costoEvoF=0.0;
+         ral->tempe =0.0;
+         ral->tempef=0.0;
     int i;
     for ( i = 0; i < MAXRAL; i++)
     {
@@ -23,29 +38,63 @@ void initializeRAL (RAL *ral){
 
 
 
-int localizarRAL(RAL *ral, char code[], int *pos, float *celdas_consultadas){
-    int i, celdaLibre=-1, cont=0, costosAux=0;
+int localizarRAL(RAL *ral, char code[], int *pos, int p){
+
+    ral->costoEvoE = 0.0;
+    ral->costoEvoF = 0.0;
+
+
+    int i, celdaLibre=-1, cont=0, temp=0;
     i=hashing(code, MAXRAL);
 
     while( (cont < MAXRAL) && (strcmp(ral->envios[i].codigo,VIRGEN)!=0) && (strcmp(ral->envios[i].codigo,code)!=0) ){
-
+    temp++;
         if((celdaLibre==-1)&&(strcmp(ral->envios[i].codigo,LIBRE)==0)){
             celdaLibre=i;
         }
         i=(i+1)%MAXRAL;
         cont++;
-        costosAux+=1;
-    }
 
-    if(cont<MAXRAL){
-        costosAux+=1;
+
+
     }
-    (*celdas_consultadas)=costosAux;
+/*
+    if(cont<MAXRAL)
+        temp++;
+
+*/
 
     if((cont<MAXRAL)&&(stricmp(ral->envios[i].codigo, code)==0)){ //EXITO
         (*pos)=i;
+
+
+     if(p==0){
+
+
+          if (ral->eExMax < temp) {
+                ral->eExMax = temp;
+            }
+
+            ral->eExCant++;
+            ral->costoEvoE += temp;
+            ral->tempe += ral->costoEvoE;
+            ral->eExMed = ral->tempe / (ral->eExCant);
+  }
+
+
         return 1;
-    } else if(cont<MAXRAL){ //FRACASO
+    } else if(cont<MAXRAL){//FRACASO
+
+            if (p == 0) {
+            if (ral->eFrMax < temp) {
+                ral->eFrMax = temp;
+            }
+            ral->eFrCant++;
+            ral->costoEvoF += temp;
+            ral->tempef += ral->costoEvoF;
+            ral->eFrMed = ral->tempef / (ral->eExCant);
+        }
+
         if(celdaLibre!=-1){ //PASO POR CELDA LIBRE
             (*pos)=celdaLibre;
             return 0;
@@ -64,7 +113,7 @@ int altaRAL(RAL *ral, Envio envio)
 {
     int pos;
     float celdasConsult = 0.0;
-    int loc = localizarRAL(ral, envio.codigo, &pos, &celdasConsult);
+    int loc = localizarRAL(ral, envio.codigo, &pos, 1);
     if(loc == 0 ){
         ral->envios[pos] = envio;
         ral->cant++;
@@ -84,7 +133,7 @@ int bajaRAL (RAL *lista, Envio envio) {
 
     int pos, confirm;
     float celdas_consultadas = 0.0;
-    if (localizarRAL(lista, envio.codigo, &pos, &celdas_consultadas) == 0) { //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
+    if (localizarRAL(lista, envio.codigo, &pos, 1) != 1) { //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
         return 0;
     } else {
 
@@ -112,12 +161,12 @@ int bajaRAL (RAL *lista, Envio envio) {
 
 }
 
-int evocarRAL(RAL *ral, char code[] ,Envio *envios, float* costo){
+int evocarRAL(RAL *ral, char code[] ,Envio *envios){
     int pos;
     float costosAux=0.0;
-    if ( localizarRAL(ral,code,&pos,&costosAux) == 0){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
-        (*costo) = costosAux;
-        return 1;
+    if ( localizarRAL(ral,code,&pos,0) == 0){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
+
+        return 0;
     }  else{
 strcpy(envios->codigo, ral->envios[pos].codigo);
 envios->dni_remitente = ral->envios[pos].dni_receptor;
@@ -128,7 +177,6 @@ strcpy(envios->nombre, ral->envios[pos].nombre);
 envios->dni_remitente = ral->envios[pos].dni_remitente;
 strcpy(envios->fecha_envio, ral->envios[pos].fecha_envio);
 strcpy(envios->fecha_recepcion, ral->envios[pos].fecha_recepcion);
-(*costo) = costosAux;
 return 1;
 }
 }

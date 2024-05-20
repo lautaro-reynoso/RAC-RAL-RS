@@ -62,26 +62,6 @@ int LocalizeRs(RS *rs, int *j, char *code, float *costo){
         return 0;
 }
 
-
-void insertl(lista_de_envios *l, Envio a){
-    Nodo *p;
-    p=(Nodo*)malloc(sizeof(Nodo));
-    if ((*l).cur == (*l).acc){
-        (*p).vipd=a;
-        (*p).ps=(*l).cur;
-        (*l).acc=p;
-        (*l).cur=p;
-    }
-    else{
-        (*p).vipd=a;
-        (*p).ps=(*l).cur;
-        (*l).aux->ps=p;
-        (*l).cur=p;
-    };}
-
-
-
-
 int altaRS(RS *rs, Envio a){
     if (rs->cant==MAXRS)
         return 0;
@@ -111,6 +91,26 @@ else{
     rs->indicador[i]=1;
     return 1;
 }
+
+
+
+void insertl(lista_de_envios *l, Envio a){
+    Nodo *p;
+    p=(Nodo*)malloc(sizeof(Nodo));
+    if ((*l).cur == (*l).acc){
+        (*p).vipd=a;
+        (*p).ps=(*l).cur;
+        (*l).acc=p;
+        (*l).cur=p;
+    }
+    else{
+        (*p).vipd=a;
+        (*p).ps=(*l).cur;
+        (*l).aux->ps=p;
+        (*l).cur=p;
+    };}
+
+
 
 
 
