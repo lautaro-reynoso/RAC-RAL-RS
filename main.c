@@ -49,6 +49,7 @@ int main() {
     initializeRAC(&rac);
     initializeRS(&rs);
     LecturaOperaciones(&rac,&ral,&rs);
+
     do {
         // Men� principal
 
@@ -128,7 +129,7 @@ int main() {
 }
 
 int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
-
+int baja=0,alta=0;
     // Declaraciones e inicializaciones
     int evocar = 0, contador = 0;
     Envio aux, aux2;
@@ -193,6 +194,8 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
                 // Llama a la funci�n correspondiente para alta o baja en las estructuras
                 if (codigoOperador == 1) {
 
+                    alta++;
+
                    altaRAC(rac, aux);
                    altaRAL(ral,aux);
 
@@ -204,6 +207,7 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
                 }
                 if (codigoOperador == 2) {
 
+                    baja+=1;
                     bajaRAC(rac,aux);
                  bajaRAL(ral,aux);
                  //   bajaRS(rs,aux);
@@ -227,6 +231,8 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
             }
 
         }
+
+        printf("ALTAS: %d, BAJAS: %d \n", alta,baja);
 
         fclose(fp);
 

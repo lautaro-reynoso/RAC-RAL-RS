@@ -3,10 +3,8 @@
 
 #include "Envios.h"
 
-#define MAXRAC 59 ///p=0.90
+#define MAXRAC 59///p=0.90
 
-
-//ESTRUCTURA
 typedef struct {
     Envio envios[MAXRAC];
     int cant;
@@ -195,6 +193,9 @@ int bajaRAC(RAC *rac, Envio envio) {
             }
             if ((i + 1) % 10 == 0) system("pause");
         }
+
+        printf("ENVIOS:%d\n",rac.cant);
+
     }
 
 

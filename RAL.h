@@ -122,14 +122,11 @@ int altaRAL(RAL *ral, Envio envio)
 }
 
 
-
-//BAJA
-
 int bajaRAL (RAL *lista, Envio envio) {
 
     int pos;
 
-    if (localizarRAL(lista, envio.codigo, &pos, 1) != 1) { //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
+    if (localizarRAL(lista, envio.codigo, &pos, 1) != 1) {
         return 0;
     } else {
 
@@ -141,7 +138,7 @@ int bajaRAL (RAL *lista, Envio envio) {
             && (strcmp(lista->envios[pos].fecha_recepcion, envio.fecha_recepcion) == 0) &&
             (strcmp(lista->envios[pos].nombre, envio.nombre) == 0)
             && (strcmp(lista->envios[pos].nombre_r, envio.nombre_r) == 0)) {
-            //EXITO, CELDA LIBRE
+
             strcpy(lista->envios[pos].codigo, LIBRE);
             lista->cant--;
             return 1;
@@ -159,7 +156,7 @@ int bajaRAL (RAL *lista, Envio envio) {
 
 int evocarRAL(RAL *ral, char code[] ,Envio *envios){
     int pos;
-    if ( localizarRAL(ral,code,&pos,0) == 0){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
+    if ( localizarRAL(ral,code,&pos,0) == 0){
 
         return 0;
     }  else{
@@ -175,8 +172,6 @@ strcpy(envios->fecha_recepcion, ral->envios[pos].fecha_recepcion);
 return 1;
 }
 }
-
-//MOSTRAR
 void printRAL (RAL ral){
     int i = 0;
     for (i=0; i < MAXRAL ; i++) {
@@ -200,6 +195,8 @@ void printRAL (RAL ral){
         }
         if ((i+1) % 10 == 0) system("pause");
     }
+
+    printf("ENVIOS:%d\n",ral.cant);
 }
 
 
