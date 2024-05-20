@@ -185,8 +185,7 @@ void printRS(RS *rs) {
             }
 
             if (count % 5 == 0) {
-                printf("Presiona Enter para continuar...\n");
-                getchar();  // Pausa, espera a que el usuario presione Enter
+                getchar();
             }
 
             current = current->ps;

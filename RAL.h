@@ -30,7 +30,7 @@ void initializeRAL (RAL *ral){
     int i;
     for ( i = 0; i < MAXRAL; i++)
     {
-        strcpy(ral->envios[i].codigo, VIRGEN); //Ninguna celda ha sido usada
+        strcpy(ral->envios[i].codigo, VIRGEN);
     }
     ral->cant = 0;
 
@@ -39,37 +39,32 @@ void initializeRAL (RAL *ral){
 
 
 int localizarRAL(RAL *ral, char code[], int *pos, int p){
+    *pos=0;
+    if(ral->cant==0)
+    {
+        return 0;
+    }
 
-    ral->costoEvoE = 0.0;
-    ral->costoEvoF = 0.0;
-
-
-    int i, celdaLibre=-1, cont=0, temp=0;
+    int i, libre=-1, cont=0, temp=0;
     i=hashing(code, MAXRAL);
 
     while( (cont < MAXRAL) && (strcmp(ral->envios[i].codigo,VIRGEN)!=0) && (strcmp(ral->envios[i].codigo,code)!=0) ){
     temp++;
-        if((celdaLibre==-1)&&(strcmp(ral->envios[i].codigo,LIBRE)==0)){
-            celdaLibre=i;
+        if((libre==-1)&&(strcmp(ral->envios[i].codigo,LIBRE)==0)){
+            libre=i;
         }
-        i=(i+1)%MAXRAL;
         cont++;
-
+        i=(i+1)%MAXRAL;
 
 
     }
-/*
     if(cont<MAXRAL)
         temp++;
 
-*/
-
-    if((cont<MAXRAL)&&(stricmp(ral->envios[i].codigo, code)==0)){ //EXITO
+    if((cont<MAXRAL)&&(stricmp(ral->envios[i].codigo, code)==0)){
         (*pos)=i;
 
-
      if(p==0){
-
 
           if (ral->eExMax < temp) {
                 ral->eExMax = temp;
@@ -77,13 +72,10 @@ int localizarRAL(RAL *ral, char code[], int *pos, int p){
 
             ral->eExCant++;
             ral->costoEvoE += temp;
-            ral->tempe += ral->costoEvoE;
-            ral->eExMed = ral->tempe / (ral->eExCant);
+            ral->eExMed = ral->costoEvoE / (ral->eExCant);
   }
-
-
         return 1;
-    } else if(cont<MAXRAL){//FRACASO
+    } else if(cont<MAXRAL){
 
             if (p == 0) {
             if (ral->eFrMax < temp) {
@@ -91,28 +83,32 @@ int localizarRAL(RAL *ral, char code[], int *pos, int p){
             }
             ral->eFrCant++;
             ral->costoEvoF += temp;
-            ral->tempef += ral->costoEvoF;
-            ral->eFrMed = ral->tempef / (ral->eExCant);
+            ral->eFrMed = ral->costoEvoF / (ral->eFrCant);
         }
 
-        if(celdaLibre!=-1){ //PASO POR CELDA LIBRE
-            (*pos)=celdaLibre;
+        if(libre!=-1){
+            (*pos)=libre;
             return 0;
-        } else { //CELDA VIRGEN
+        } else {
             (*pos)=i;
             return 0;
         }
-    } else { //FRACASO, RECORRIO TODA LA ESTRUCTURA
+    } else {
         return 2;
     }
 }
 
 
-//ALTA
 int altaRAL(RAL *ral, Envio envio)
 {
+
+
+    if(ral->cant==MAXRAL)
+    {
+        return 2;
+    }
     int pos;
-    float celdasConsult = 0.0;
+
     int loc = localizarRAL(ral, envio.codigo, &pos, 1);
     if(loc == 0 ){
         ral->envios[pos] = envio;
@@ -120,7 +116,7 @@ int altaRAL(RAL *ral, Envio envio)
         return 0;
     } else if(loc == 1){
         return 1;
-    } else { //esta lleno
+    } else {
         return 2;
     }
 }
@@ -131,8 +127,8 @@ int altaRAL(RAL *ral, Envio envio)
 
 int bajaRAL (RAL *lista, Envio envio) {
 
-    int pos, confirm;
-    float celdas_consultadas = 0.0;
+    int pos;
+
     if (localizarRAL(lista, envio.codigo, &pos, 1) != 1) { //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
         return 0;
     } else {
@@ -163,7 +159,6 @@ int bajaRAL (RAL *lista, Envio envio) {
 
 int evocarRAL(RAL *ral, char code[] ,Envio *envios){
     int pos;
-    float costosAux=0.0;
     if ( localizarRAL(ral,code,&pos,0) == 0){ //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
 
         return 0;
@@ -186,24 +181,24 @@ void printRAL (RAL ral){
     int i = 0;
     for (i=0; i < MAXRAL ; i++) {
         if(strcmp(ral.envios[i].codigo,LIBRE)==0){
-            printf("\t--------------------------------------");
+            printf("\t***************************\n\n");
             printf("\n\tElemento N #%d de %d \n", i+1, MAXRAL);
             printf("\tCELDA LIBRE +\n");
-            printf("\t--------------------------------------\n\n");
+            printf("\t***************************\n\n");
         }
         else if(strcmp(ral.envios[i].codigo, VIRGEN)==0){
-            printf("\n\t--------------------------------------");
+            printf("\t***************************\n\n");
             printf("\n\tElemento N #%d de %d \n", i+1, MAXRAL);
             printf("\tCELDA VIRGEN *\n");
-            printf("\t--------------------------------------\n\n");
+            printf("\t***************************\n\n");
         }
         else {
-            printf("\n\t--------------------------------------");
+            printf("\t***************************\n\n");
             printf("\n\tElemento N #%d de %d\n", i+1, MAXRAL);
             mostrarenvio(ral.envios[i]);
-            printf("\t--------------------------------------\n");
+            printf("\t***************************\n\n");
         }
-        if ((i+1) % 5 == 0) system("pause");
+        if ((i+1) % 10 == 0) system("pause");
     }
 }
 

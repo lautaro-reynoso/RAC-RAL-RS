@@ -38,13 +38,20 @@ void initializeRAC(RAC *rac) {
 
 
 int localizarRAC(RAC *rac, char code[], int *pos, int k) {
-    int i = hashing(code, MAXRAC), cont = 0, celdaLibre = -1, p = 1, temp = 0;
+    *pos=0;
+    if(rac->cant==0)
+    {
+        return 0;
+    }
 
-    while ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0) &&
-           (strcmp(rac->envios[i].codigo, code) != 0)) {
 
-        if ((celdaLibre == -1) && (strcmp(rac->envios[i].codigo, LIBRE) == 0)) {
-            celdaLibre = i; //CELDA LIBRE EN I
+
+    int libre = -1, i = hashing(code, MAXRAC), cont = 0, p = 1, temp = 0;
+
+    while ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0) &&(strcmp(rac->envios[i].codigo, code) != 0)) {
+
+        if ((libre == -1) && (strcmp(rac->envios[i].codigo, LIBRE) == 0)) {
+            libre = i;
         }
 
         i = (i + p) % MAXRAC;
@@ -53,11 +60,11 @@ int localizarRAC(RAC *rac, char code[], int *pos, int k) {
         temp++;
     }
 
-/*
+
     if (cont < MAXRAC) {
       temp++;
     }
-*/
+
     if ((cont < MAXRAC) && (stricmp(rac->envios[i].codigo, code) == 0)) { //EXITO
         (*pos) = i;
 
@@ -70,12 +77,11 @@ int localizarRAC(RAC *rac, char code[], int *pos, int k) {
 
             rac->eExCant++;
             rac->costoEvoE += temp;
-            rac->tempe += rac->costoEvoE;
-            rac->eExMed = rac->tempe / (rac->eExCant);
+            rac->eExMed = rac->costoEvoE / (rac->eExCant);
   }
 
         return 1;
-    } else if (cont < MAXRAC) { //FRACASO
+    } else if (cont < MAXRAC) {
 
          if (k == 0) {
             if (rac->eFrMax < temp) {
@@ -83,46 +89,49 @@ int localizarRAC(RAC *rac, char code[], int *pos, int k) {
             }
             rac->eFrCant++;
             rac->costoEvoF += temp;
-            rac->tempef += rac->costoEvoF;
-            rac->eFrMed = rac->tempef / (rac->eExCant);
+            rac->eFrMed = rac->costoEvoF / (rac->eFrCant);
         }
 
 
 
-        if (celdaLibre != -1) { //CELDA LIBRE
-            (*pos) = celdaLibre;
+        if (libre != -1) {
+            (*pos) = libre;
             return 0;
-        } else { //CELDA VIRGEN
+        } else {
             (*pos) = i;
             return 0;
         }
-    } else { //FRACASO, RECORRIÓ TODA LA ESTRUCTURA
+    } else {
         return 2;
     }
 }
 
 
 int altaRAC(RAC *rac, Envio envios) {
+
+    if(rac->cant==MAXRAC)
+    {
+        return 2;
+    }
     int pos;
-    float celdasConsult = 0.0;
     int loc = localizarRAC(rac, envios.codigo, &pos, 1);
-    if (loc == 0) { //EXITO, NO ESTA EN LA ESTRUCTURA
+    if (loc == 0) {
 
         rac->envios[pos] = envios;
         rac->cant++;
         return 1;
-    } else if (loc == 1) { //FRACASO, ESTA EN LA ESTRUCURA
+    } else if (loc == 1) {
         return 0;
     } else {
-        return 2; //FRACASO, ESTRUCTURA LLENA
+        return 2;
     }
 }
 
 
 int bajaRAC(RAC *rac, Envio envio) {
-    int pos, confirm;
-    float celdas_consultadas = 0.0;
-    if (localizarRAC(rac, envio.codigo, &pos, 1) != 1) { //FRACASO, NO SE ENCUENTRA EN LA ESTRUCTURA
+    int pos;
+
+    if (localizarRAC(rac, envio.codigo, &pos, 1) != 1) {
         return 0;
     } else {
         if ((strcmp(rac->envios[pos].direccion, envio.direccion) == 0) &&
@@ -132,12 +141,12 @@ int bajaRAC(RAC *rac, Envio envio) {
             && (strcmp(rac->envios[pos].fecha_recepcion, envio.fecha_recepcion) == 0) &&
             (strcmp(rac->envios[pos].nombre, envio.nombre) == 0)
             && (strcmp(rac->envios[pos].nombre_r, envio.nombre_r) == 0)) {
-            //EXITO, CELDA LIBRE
+
             strcpy(rac->envios[pos].codigo, LIBRE);
             rac->cant--;
             return 1;
         } else {
-            return 2; //FRACASO, NO SON IGUALES
+            return 2;
 
         }
     }
@@ -145,8 +154,7 @@ int bajaRAC(RAC *rac, Envio envio) {
 
     int evocarRAC(RAC *rac, char code[], Envio *envios) {
         int pos;
-        float costosAux = 0.0;
-        if (localizarRAC(rac, code, &pos, 0) == 0) { //FRACASO, NO SE ENCONTRO EN LA ESTRUCTURA
+        if (localizarRAC(rac, code, &pos, 0) == 0) {
 
             return 0;
         } else {
@@ -165,27 +173,27 @@ int bajaRAC(RAC *rac, Envio envio) {
         }
     }
 
-//MOSTRAR
+
     void printRAC(RAC rac) {
         int i = 0;
         for (i = 0; i < MAXRAC; i++) {
             if (strcmp(rac.envios[i].codigo, LIBRE) == 0) {
-                printf("\t--------------------------------------");
+                printf("\t***************************\n\n");
                 printf("\n\tElemento N #%d de %d \n", i+1, MAXRAC);
-                printf("\tCELDA LIBRE +\n");
-                printf("\t--------------------------------------\n\n");
+                printf("\tBALDE LIBRE +\n");
+                   printf("\t***************************\n\n");
             } else if (strcmp(rac.envios[i].codigo, VIRGEN) == 0) {
                 printf("\n\t--------------------------------------");
                 printf("\n\tElemento N #%d de %d \n", i+1, MAXRAC);
-                printf("\tCELDA VIRGEN *\n");
-                printf("\t--------------------------------------\n\n");
+                printf("\tBALDE VIRGEN *\n");
+                   printf("\t***************************\n\n");
             } else {
                 printf("\n\t--------------------------------------");
                 printf("\n\tElemento N #%d de %d\n", i+1, MAXRAC);
                 mostrarenvio(rac.envios[i]);
-                printf("\t--------------------------------------\n");
+                   printf("\t***************************\n\n");
             }
-            if ((i + 1) % 5 == 0) system("pause");
+            if ((i + 1) % 10 == 0) system("pause");
         }
     }
 

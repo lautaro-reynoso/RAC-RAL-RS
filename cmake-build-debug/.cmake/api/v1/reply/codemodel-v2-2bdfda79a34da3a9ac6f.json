@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Usuario/Desktop/RAC-RAL-RS/cmake-build-debug",
-		"source" : "C:/Users/Usuario/Desktop/RAC-RAL-RS"
+		"build" : "C:/Users/mateo/OneDrive/Escritorio/RAC-RAL-RS/cmake-build-debug",
+		"source" : "C:/Users/mateo/OneDrive/Escritorio/RAC-RAL-RS"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 5
+		"minor" : 6
 	}
 }
