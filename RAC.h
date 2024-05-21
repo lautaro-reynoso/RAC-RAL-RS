@@ -9,23 +9,23 @@ typedef struct {
     Envio envios[MAXRAC];
     int cant;
 
-      float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant,costoEvoE,costoEvoF,tempe,tempef;
+    float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant, costoEvoE, costoEvoF, tempe, tempef;
 
 } RAC;
 
 
 void initializeRAC(RAC *rac) {
 
-       rac->eExCant = 0.0;
-    rac->eExMax =0.0;
-    rac->eExMed =0.0;
-     rac->eFrMax  =0.0;
-     rac->eFrMed  =0.0;
-     rac->eFrCant =0.0;
-       rac->costoEvoE =0.0;
-       rac->costoEvoF=0.0;
-         rac->tempe =0.0;
-         rac->tempef=0.0;
+    rac->eExCant = 0.0;
+    rac->eExMax = 0.0;
+    rac->eExMed = 0.0;
+    rac->eFrMax = 0.0;
+    rac->eFrMed = 0.0;
+    rac->eFrCant = 0.0;
+    rac->costoEvoE = 0.0;
+    rac->costoEvoF = 0.0;
+    rac->tempe = 0.0;
+    rac->tempef = 0.0;
     int i;
     for (i = 0; i < MAXRAC; i++) {
         strcpy(rac->envios[i].codigo, VIRGEN); //Ninguna celda ha sido usada
@@ -35,18 +35,17 @@ void initializeRAC(RAC *rac) {
 }
 
 
-int localizarRAC(RAC *rac, char code[], int *pos, int k) {
-    *pos=0;
-    if(rac->cant==0)
-    {
+int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
+    *pos = 0;
+    if (rac->cant == 0) {
         return 0;
     }
 
 
+    int libre = -1, i = hashing(codigo, MAXRAC), cont = 0, p = 1, temp = 0;
 
-    int libre = -1, i = hashing(code, MAXRAC), cont = 0, p = 1, temp = 0;
-
-    while ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0) &&(strcmp(rac->envios[i].codigo, code) != 0)) {
+    while ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0) &&
+           (strcmp(rac->envios[i].codigo, codigo) != 0)) {
 
         if ((libre == -1) && (strcmp(rac->envios[i].codigo, LIBRE) == 0)) {
             libre = i;
@@ -60,28 +59,28 @@ int localizarRAC(RAC *rac, char code[], int *pos, int k) {
 
 
     if (cont < MAXRAC) {
-      temp++;
+        temp++;
     }
 
-    if ((cont < MAXRAC) && (stricmp(rac->envios[i].codigo, code) == 0)) { //EXITO
+    if ((cont < MAXRAC) && (stricmp(rac->envios[i].codigo, codigo) == 0)) { //EXITO
         (*pos) = i;
 
-  if(k==0){
+        if (k == 0) {
 
 
-          if (rac->eExMax < temp) {
+            if (rac->eExMax < temp) {
                 rac->eExMax = temp;
             }
 
             rac->eExCant++;
             rac->costoEvoE += temp;
             rac->eExMed = rac->costoEvoE / (rac->eExCant);
-  }
+        }
 
         return 1;
     } else if (cont < MAXRAC) {
 
-         if (k == 0) {
+        if (k == 0) {
             if (rac->eFrMax < temp) {
                 rac->eFrMax = temp;
             }
@@ -89,7 +88,6 @@ int localizarRAC(RAC *rac, char code[], int *pos, int k) {
             rac->costoEvoF += temp;
             rac->eFrMed = rac->costoEvoF / (rac->eFrCant);
         }
-
 
 
         if (libre != -1) {
@@ -107,8 +105,7 @@ int localizarRAC(RAC *rac, char code[], int *pos, int k) {
 
 int altaRAC(RAC *rac, Envio envios) {
 
-    if(rac->cant==MAXRAC)
-    {
+    if (rac->cant == MAXRAC) {
         return 2;
     }
     int pos;
@@ -150,53 +147,55 @@ int bajaRAC(RAC *rac, Envio envio) {
     }
 }
 
-    int evocarRAC(RAC *rac, char code[], Envio *envios) {
-        int pos;
-        if (localizarRAC(rac, code, &pos, 0) == 0) {
+int evocarRAC(RAC *rac, char code[], Envio *envios) {
+    int pos;
+    if (localizarRAC(rac, code, &pos, 0) == 0) {
 
-            return 0;
+        return 0;
+    } else {
+
+        strcpy(envios->codigo, rac->envios[pos].codigo);
+        envios->dni_remitente = rac->envios[pos].dni_receptor;
+        strcpy(envios->nombre_r, rac->envios[pos].nombre_r);
+        strcpy(envios->direccion, rac->envios[pos].direccion);
+        envios->dni_remitente = rac->envios[pos].dni_remitente;
+        strcpy(envios->nombre, rac->envios[pos].nombre);
+        envios->dni_remitente = rac->envios[pos].dni_remitente;
+        strcpy(envios->fecha_envio, rac->envios[pos].fecha_envio);
+        strcpy(envios->fecha_recepcion, rac->envios[pos].fecha_recepcion);
+
+        return 1;
+    }
+}
+
+
+void printRAC(RAC rac) {
+
+
+    int i = 0;
+    for (i = 0; i < MAXRAC; i++) {
+        if (strcmp(rac.envios[i].codigo, LIBRE) == 0) {
+            printf("\t***************************\n\n");
+            printf("\n\tElemento N #%d de %d \n", i + 1, MAXRAC);
+            printf("\tBALDE LIBRE +\n");
+            printf("\t***************************\n\n");
+        } else if (strcmp(rac.envios[i].codigo, VIRGEN) == 0) {
+            printf("\n\t--------------------------------------");
+            printf("\n\tElemento N #%d de %d \n", i + 1, MAXRAC);
+            printf("\tBALDE VIRGEN *\n");
+            printf("\t***************************\n\n");
         } else {
-
-            strcpy(envios->codigo, rac->envios[pos].codigo);
-            envios->dni_remitente = rac->envios[pos].dni_receptor;
-            strcpy(envios->nombre_r, rac->envios[pos].nombre_r);
-            strcpy(envios->direccion, rac->envios[pos].direccion);
-            envios->dni_remitente = rac->envios[pos].dni_remitente;
-            strcpy(envios->nombre, rac->envios[pos].nombre);
-            envios->dni_remitente = rac->envios[pos].dni_remitente;
-            strcpy(envios->fecha_envio, rac->envios[pos].fecha_envio);
-            strcpy(envios->fecha_recepcion, rac->envios[pos].fecha_recepcion);
-
-            return 1;
+            printf("\n\t--------------------------------------");
+            printf("\n\tElemento N #%d de %d\n", i + 1, MAXRAC);
+            mostrarenvio(rac.envios[i]);
+            printf("\t***************************\n\n");
         }
+        if ((i + 1) % 10 == 0) system("pause");
     }
 
+    printf("ENVIOS:%d\n", rac.cant);
 
-    void printRAC(RAC rac) {
-        int i = 0;
-        for (i = 0; i < MAXRAC; i++) {
-            if (strcmp(rac.envios[i].codigo, LIBRE) == 0) {
-                printf("\t***************************\n\n");
-                printf("\n\tElemento N #%d de %d \n", i+1, MAXRAC);
-                printf("\tBALDE LIBRE +\n");
-                   printf("\t***************************\n\n");
-            } else if (strcmp(rac.envios[i].codigo, VIRGEN) == 0) {
-                printf("\n\t--------------------------------------");
-                printf("\n\tElemento N #%d de %d \n", i+1, MAXRAC);
-                printf("\tBALDE VIRGEN *\n");
-                   printf("\t***************************\n\n");
-            } else {
-                printf("\n\t--------------------------------------");
-                printf("\n\tElemento N #%d de %d\n", i+1, MAXRAC);
-                mostrarenvio(rac.envios[i]);
-                   printf("\t***************************\n\n");
-            }
-            if ((i + 1) % 10 == 0) system("pause");
-        }
-
-        printf("ENVIOS:%d\n",rac.cant);
-
-    }
+}
 
 
 #endif // RAC_H_INCLUDED

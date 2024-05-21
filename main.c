@@ -7,7 +7,32 @@
 #include "RAL.h"
 #include "RS.h"
 #include "Envios.h"
+/*
+ * Análisis Comparativo
+Rebalse Separado (RS)
 
+Pros:
+Tiene la menor máxima y media evocación tanto en éxito como en fracaso.
+Esto sugiere que en promedio se consultan menos baldes, lo que se traduce en menores costos operativos.
+Cons:
+La estructura de rebalse separado puede ser más compleja de implementar y mantener.
+Rebalse Abierto Cuadrático (RAC)
+
+Pros:
+Mejor media evocación exitosa (2.74) en comparación con RAL (3.67).
+Cons:
+La máxima evocación en fracaso (37.00) es muy alta, indicando potenciales operaciones costosas en casos extremos.
+Mayor media evocación en fracaso (13.71) en comparación con RAL (3.52) y RS (1.98).
+Rebalse Abierto Lineal (RAL)
+
+Pros:
+Tiene una máxima evocación en fracaso (6.00) considerablemente baja comparada con RAC.
+Media evocación en fracaso (3.52) es menor que RAC pero mayor que RS.
+Cons:
+Media y máxima evocación exitosa son mayores que las de RS y RAC en algunos casos, indicando mayor costo en operaciones exitosas.
+Conclusión
+En términos de eficiencia general (menor consulta de baldes en promedio y en casos extremos), el Rebalse Separado (RS) parece ser la opción más óptima y conveniente
+ */
 
 int LecturaOperaciones();
 
@@ -33,22 +58,18 @@ char *Mayusculas(char string[]) {
 }
 
 
-
-
-
-
 int main() {
 
 
     int opcion, submenu_opcion;
     RAC rac;
     RAL ral;
- RS rs;
+    RS rs;
 
     initializeRAL(&ral);
     initializeRAC(&rac);
     initializeRS(&rs);
-    LecturaOperaciones(&rac,&ral,&rs);
+
 
     do {
         // Men� principal
@@ -61,17 +82,18 @@ int main() {
         switch (opcion) {
             case 1:
                 system("cls");
-
-
-
+                LecturaOperaciones(&rac, &ral, &rs);
 
                 printf("\t Acum Ev.Ex | Max.Ev.Ex | Med.Ev.Ex |Acum Ev.Fr | Max.Ev.Fr | Med.Ev.Fr|\n");
                 printf("-----------------------------------------------------------------------------------------------\n");
-                printf("RAL ::   |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",ral.costoEvoE, ral.eExMax, ral.eExMed ,ral.costoEvoF ,ral.eFrMax , ral.eFrMed);
+                printf("RAL ::   |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",
+                       ral.costoEvoE, ral.eExMax, ral.eExMed, ral.costoEvoF, ral.eFrMax, ral.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
-                printf("RAC ::   |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",rac.costoEvoE, rac.eExMax, rac.eExMed ,rac.costoEvoF ,rac.eFrMax , rac.eFrMed);
+                printf("RAC ::   |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",
+                       rac.costoEvoE, rac.eExMax, rac.eExMed, rac.costoEvoF, rac.eFrMax, rac.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
-           //     printf("RS   ::  |   %.2f   |   %.2f    |  %.2f    |   %.2f   | \n");
+                printf("RS   ::  |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",
+                       rs.costoEvoE, rs.eExMax, rs.eExMed, rs.costoEvoF, rs.eFrMax, rs.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
 
 
@@ -129,7 +151,7 @@ int main() {
 }
 
 int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
-int baja=0,alta=0;
+    int baja = 0, alta = 0;
     // Declaraciones e inicializaciones
     int evocar = 0, contador = 0;
     Envio aux, aux2;
@@ -194,23 +216,19 @@ int baja=0,alta=0;
                 // Llama a la funci�n correspondiente para alta o baja en las estructuras
                 if (codigoOperador == 1) {
 
-                    alta++;
 
-                   altaRAC(rac, aux);
-                   altaRAL(ral,aux);
-
-                //    altaRS(rs,aux);
-
-
+                    altaRAC(rac, aux);
+                    altaRAL(ral, aux);
+                    altaRS(rs, aux);
 
 
                 }
                 if (codigoOperador == 2) {
 
-                    baja+=1;
-                    bajaRAC(rac,aux);
-                 bajaRAL(ral,aux);
-                 //   bajaRS(rs,aux);
+
+                    bajaRAC(rac, aux);
+                    bajaRAL(ral, aux);
+                    bajaRS(rs, aux);
 
 
                 }
@@ -219,8 +237,9 @@ int baja=0,alta=0;
 
                 evocar++;
 
-           evocarRAL(ral,aux.codigo, &aux2);
-              evocarRAC(rac,aux.codigo, &aux2);
+                evocarRAL(ral, aux.codigo, &aux2);
+                evocarRAC(rac, aux.codigo, &aux2);
+                evocarRS(rs, aux, &aux2);
                 int exito = 0;
 
 
@@ -232,7 +251,7 @@ int baja=0,alta=0;
 
         }
 
-        printf("ALTAS: %d, BAJAS: %d \n", alta,baja);
+        //  printf("ALTAS: %d, BAJAS: %d \n", alta,baja);
 
         fclose(fp);
 
