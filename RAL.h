@@ -86,15 +86,16 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
             ral->eFrMed = ral->costoEvoF / (ral->eFrCant);
         }
 
+
+            (*pos) = i;//recorrio y devuelvo el primer virgen
+            return 0;
+
+    } else {
         if (libre != -1) {
             (*pos) = libre;
-            return 0;
-        } else {
-            (*pos) = i;
-            return 0;
+            return 0;//recorrio toda la estroctura y devuelvo el primer libre
         }
-    } else {
-        return 2;
+        return 2;//recorrio toda la estroctura y no tiene lugar
     }
 }
 

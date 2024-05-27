@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRS 36
+#define MAXRS 1
 
 struct nodo {
     Envio vipd;
@@ -21,7 +21,7 @@ typedef struct {
     lista_de_envios envios[MAXRS];
     int cant;
     int indicador[MAXRS];
-    float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant,costoEvoE,costoEvoF,tempe,tempef;
+    float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant, costoEvoE, costoEvoF, tempe, tempef;
 } RS;
 
 void initializeRS(RS *rs) {
@@ -54,7 +54,7 @@ void initializeRS(RS *rs) {
     rs->tempef = 0.0;
 }
 
-int LocalizarRS(RS *rs, int *j, char codigo[],int k) {
+int LocalizarRS(RS *rs, int *j, char codigo[], int k, Nodo **actual, Nodo **anterior) {
 
     int temp = 0.0;
 
@@ -74,7 +74,7 @@ int LocalizarRS(RS *rs, int *j, char codigo[],int k) {
         rs->envios[i].actual = rs->envios[i].actual->siguiente;
         temp++;
     }
-    if (rs->envios[i].actual != NULL){
+    if (rs->envios[i].actual != NULL) {
         temp++;
         if (k == 0) {
 
@@ -88,9 +88,7 @@ int LocalizarRS(RS *rs, int *j, char codigo[],int k) {
             rs->eExMed = rs->costoEvoE / (rs->eExCant);
         }
         return 1;
-    }
-
-    else{
+    } else {
 
         if (k == 0) {
             if (rs->eFrMax < temp) {
@@ -106,62 +104,58 @@ int LocalizarRS(RS *rs, int *j, char codigo[],int k) {
 }
 
 int altaRS(RS *rs, Envio a) {
-    if (rs->cant == MAXRS)
-        return 0;
+
+    Nodo *actual;
+    Nodo *anterior;
+
 
     int i;
 
-    if (LocalizarRS(rs, &i, a.codigo,1) == 1)
+    if (LocalizarRS(rs, &i, a.codigo, 1, actual, anterior) == 1)
         return 0;
 
 
     Nodo *p;
     p = (Nodo *) malloc(sizeof(Nodo));
-    if (rs->envios[i].actual == rs->envios[i].inicio) {
-        (*p).vipd = a;
-        (*p).siguiente = rs->envios[i].actual;
-        rs->envios[i].inicio = p;
-        rs->envios[i].actual = p;
-    } else {
-        (*p).vipd = a;
-        (*p).siguiente = rs->envios[i].actual;
-        rs->envios[i].anterior->siguiente = p;
-        rs->envios[i].actual = p;
-    }
+
+    (*p).vipd = a;
+    (*p).siguiente = rs->envios[i].inicio;
+    rs->envios[i].inicio = p;
+
     rs->cant++;
-    rs->indicador[i] = 1;
+
     return 1;
 }
 
 
-void limpiars(RS *rs){
+void limpiars(RS *rs) {
     int i;
-    for ( i = 0; i < MAXRS; ++i) {
-        if(rs->envios[i].inicio==NULL){
+    for (i = 0; i < MAXRS; ++i) {
+        if (rs->envios[i].inicio == NULL) {
 
-        }
-        else{
-            rs->envios[i].actual=rs->envios[i].inicio->siguiente;
-            rs->envios[i].anterior=rs->envios[i].inicio;
-            while (rs->envios[i].actual!=NULL){
-                rs->envios[i].anterior->siguiente=rs->envios[i].actual->siguiente;
+        } else {
+            rs->envios[i].actual = rs->envios[i].inicio->siguiente;
+            rs->envios[i].anterior = rs->envios[i].inicio;
+            while (rs->envios[i].actual != NULL) {
+                rs->envios[i].anterior->siguiente = rs->envios[i].actual->siguiente;
                 free(rs->envios[i].actual);
-                rs->envios[i].actual=rs->envios[i].anterior->siguiente;
+                rs->envios[i].actual = rs->envios[i].anterior->siguiente;
             }
             free(rs->envios[i].anterior);
-            rs->envios[i].inicio=NULL;
+            rs->envios[i].inicio = NULL;
         }
     }
 }
 
 
 int bajaRS(RS *rs, Envio a) {
-    if (rs->cant == 0)
-        return 0;
+
 
     int i;
+    Nodo *actual;
+    Nodo *anterior;
 
-    if (LocalizarRS(rs, &i, a.codigo,1) == 0)
+    if (LocalizarRS(rs, &i, a.codigo, 1, actual, anterior) == 0)
         return 0;
 
     if ((strcmp(rs->envios[i].actual->vipd.direccion, a.direccion) == 0) &&
@@ -178,7 +172,6 @@ int bajaRS(RS *rs, Envio a) {
             rs->envios[i].anterior = rs->envios[i].inicio;
 
 
-
         } else {
             rs->envios[i].anterior->siguiente = rs->envios[i].actual->siguiente;
 
@@ -187,7 +180,7 @@ int bajaRS(RS *rs, Envio a) {
         rs->envios[i].actual = rs->envios[i].inicio;
         rs->cant--;
         return 1;
-    }else
+    } else
         return 0;
 
 
@@ -198,9 +191,10 @@ int evocarRS(RS *rs, Envio a, Envio *envios) {
         return 0;
 
     int pos;
+    Nodo *actual;
+    Nodo *anterior;
 
-
-    if (LocalizarRS(rs, &pos, a.codigo,0) == 0) {
+    if (LocalizarRS(rs, &pos, a.codigo, 0, actual, anterior) == 0) {
 
         return 0;
     } else {
@@ -226,9 +220,9 @@ void printRS(RS *rs) {
 
         Nodo *current = rs->envios[i].inicio;
 
-        if( rs->envios[i].inicio == NULL){
+        if (rs->envios[i].inicio == NULL) {
             printf("Balde N %d: No contiene envios\n", i + 1);
-        }else{
+        } else {
             printf("Balde N %d:\n", i + 1);
             int count = 1;  // Contador para elementos dentro de la lista
             while (current != NULL) {

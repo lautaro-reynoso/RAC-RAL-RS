@@ -70,7 +70,7 @@ int main() {
     initializeRAC(&rac);
     initializeRS(&rs);
 
-
+    LecturaOperaciones(&rac, &ral, &rs);
     do {
         // Men� principal
 
@@ -82,7 +82,7 @@ int main() {
         switch (opcion) {
             case 1:
                 system("cls");
-                LecturaOperaciones(&rac, &ral, &rs);
+
 
                 printf("\t Acum Ev.Ex | Max.Ev.Ex | Med.Ev.Ex |Acum Ev.Fr | Max.Ev.Fr | Med.Ev.Fr|\n");
                 printf("-----------------------------------------------------------------------------------------------\n");
@@ -171,7 +171,7 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
 
     // Concatenar la ruta del archivo al directorio actual
     char filepath[1024];
-    snprintf(filepath, sizeof(filepath), "%s\\%s", cwd, "../Operaciones-Envios.txt");
+    snprintf(filepath, sizeof(filepath), "%s\\%s", cwd, "/Operaciones-Envios.txt");
 
     // Intentar abrir el archivo en modo lectura
     if ((fp = fopen(filepath, "r")) == NULL) {

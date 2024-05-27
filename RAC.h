@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRAC 59///p=0.90
+#define MAXRAC 59//p=0.90
 
 typedef struct {
     Envio envios[MAXRAC];
@@ -38,6 +38,7 @@ void initializeRAC(RAC *rac) {
 int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
     *pos = 0;
     if (rac->cant == 0) {
+        *pos = hashing(codigo, MAXRAC);
         return 0;
     }
 
@@ -90,14 +91,15 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
         }
 
 
+
+        (*pos) = i;
+        return 0;
+
+    } else {
         if (libre != -1) {
             (*pos) = libre;
             return 0;
-        } else {
-            (*pos) = i;
-            return 0;
         }
-    } else {
         return 2;
     }
 }
@@ -111,7 +113,6 @@ int altaRAC(RAC *rac, Envio envios) {
     int pos;
     int loc = localizarRAC(rac, envios.codigo, &pos, 1);
     if (loc == 0) {
-
         rac->envios[pos] = envios;
         rac->cant++;
         return 1;
@@ -142,6 +143,7 @@ int bajaRAC(RAC *rac, Envio envio) {
             return 1;
         } else {
             return 2;
+
 
         }
     }
