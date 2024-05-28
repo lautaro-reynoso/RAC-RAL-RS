@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRAC 59//p=0.90
+#define MAXRAC 7//p=0.90
 
 typedef struct {
     Envio envios[MAXRAC];
@@ -100,6 +100,16 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
             (*pos) = libre;
             return 0;
         }
+
+        if (k == 0) {
+            if (rac->eFrMax < temp) {
+                rac->eFrMax = temp;
+            }
+            rac->eFrCant++;
+            rac->costoEvoF += temp;
+            rac->eFrMed = rac->costoEvoF / (rac->eFrCant);
+        }
+
         return 2;
     }
 }

@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRS 37
+#define MAXRS 7
 
 struct nodo {
     Envio vipd;

@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRAL 68 ///p=0.74  50/0.74 = 67.56 , techo(67.56) = 68
+#define MAXRAL 7 ///p=0.74  50/0.74 = 67.56 , techo(67.56) = 68
 
 
 //ESTRUCTURA
@@ -47,7 +47,7 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
 
     int i, libre = -1, cont = 0, temp = 0;
     i = hashing(codigo, MAXRAL);
-    //printf("Codigo: %s ---> hash: %d\n",codigo,i);
+  //  printf("Codigo: %s ---> hash: %d\n",codigo,i);
     //getchar();
 
     while ((cont < MAXRAL) && (strcmp(ral->envios[i].codigo, VIRGEN) != 0) &&
@@ -98,6 +98,16 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
             (*pos) = libre;
             return 0;//recorrio toda la estroctura y devuelvo el primer libre
         }
+
+        if (p == 0) {
+            if (ral->eFrMax < temp) {
+                ral->eFrMax = temp;
+            }
+            ral->eFrCant++;
+            ral->costoEvoF += temp;
+            ral->eFrMed = ral->costoEvoF / (ral->eFrCant);
+        }
+
         return 2;//recorrio toda la estroctura y no tiene lugar
     }
 }
