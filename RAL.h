@@ -44,8 +44,11 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
         return 0;
     }
 
+
     int i, libre = -1, cont = 0, temp = 0;
     i = hashing(codigo, MAXRAL);
+    //printf("Codigo: %s ---> hash: %d\n",codigo,i);
+    //getchar();
 
     while ((cont < MAXRAL) && (strcmp(ral->envios[i].codigo, VIRGEN) != 0) &&
            (strcmp(ral->envios[i].codigo, codigo) != 0)) {
@@ -61,7 +64,7 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
     if (cont < MAXRAL)
         temp++;
 
-    if ((cont < MAXRAL) && (stricmp(ral->envios[i].codigo, codigo) == 0)) {
+    if ((cont < MAXRAL) && (strcmp(ral->envios[i].codigo, codigo) == 0)) {
         (*pos) = i;
 
         if (p == 0) {

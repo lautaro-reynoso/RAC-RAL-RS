@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRS 1
+#define MAXRS 37
 
 struct nodo {
     Envio vipd;
@@ -12,15 +12,15 @@ struct nodo {
 typedef struct nodo Nodo;
 
 typedef struct {
-    Nodo *actual;
-    Nodo *inicio;
-    Nodo *anterior;
+   Nodo *inicio;
 } lista_de_envios;
 
 typedef struct {
     lista_de_envios envios[MAXRS];
     int cant;
     int indicador[MAXRS];
+    Nodo *actual;
+    Nodo *anterior;
     float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant, costoEvoE, costoEvoF, tempe, tempef;
 } RS;
 
@@ -28,18 +28,16 @@ void initializeRS(RS *rs) {
     int i;
     for (i = 0; i < MAXRS; i++) {
 
-        Nodo *actual = rs->envios[i].inicio;
+        rs->actual = rs->envios[i].inicio;
         Nodo *siguiente;
 
-        while (actual != NULL) {
-            siguiente = actual->siguiente;
-            free(actual);
-            actual = siguiente;
+        while (rs->actual != NULL) {
+            siguiente = rs->actual->siguiente;
+            free(rs->actual);
+            rs->actual = siguiente;
         }
         rs->envios[i].inicio = NULL;
-        rs->envios[i].actual = NULL;
-        rs->envios[i].anterior = NULL;
-        rs->indicador[i] = 0;
+
     }
     rs->cant = 0;
     rs->eExCant = 0.0;
@@ -54,7 +52,7 @@ void initializeRS(RS *rs) {
     rs->tempef = 0.0;
 }
 
-int LocalizarRS(RS *rs, int *j, char codigo[], int k, Nodo **actual, Nodo **anterior) {
+int LocalizarRS(RS *rs, int *j, char codigo[], int k) {
 
     int temp = 0.0;
 
@@ -66,15 +64,15 @@ int LocalizarRS(RS *rs, int *j, char codigo[], int k, Nodo **actual, Nodo **ante
     }
 
 
-    rs->envios[i].actual = rs->envios[i].inicio;
-    rs->envios[i].anterior = rs->envios[i].inicio;
-    while (rs->envios[i].actual != NULL && strcmp(rs->envios[i].actual->vipd.codigo, codigo) != 0) {
+    rs->actual = rs->envios[i].inicio;
+    rs->anterior = rs->envios[i].inicio;
+    while (rs->actual != NULL && strcmp((rs->actual)->vipd.codigo, codigo) != 0) {
 
-        rs->envios[i].anterior = rs->envios[i].actual;
-        rs->envios[i].actual = rs->envios[i].actual->siguiente;
+        rs->anterior = rs->actual;
+        rs->actual = (rs->actual)->siguiente;
         temp++;
     }
-    if (rs->envios[i].actual != NULL) {
+    if (rs->actual != NULL) {
         temp++;
         if (k == 0) {
 
@@ -105,13 +103,12 @@ int LocalizarRS(RS *rs, int *j, char codigo[], int k, Nodo **actual, Nodo **ante
 
 int altaRS(RS *rs, Envio a) {
 
-    Nodo *actual;
-    Nodo *anterior;
+  
 
 
     int i;
 
-    if (LocalizarRS(rs, &i, a.codigo, 1, actual, anterior) == 1)
+    if (LocalizarRS(rs, &i, a.codigo, 1) == 1)
         return 0;
 
 
@@ -127,19 +124,19 @@ int altaRS(RS *rs, Envio a) {
     return 1;
 }
 
-
+/*
 void limpiars(RS *rs) {
     int i;
     for (i = 0; i < MAXRS; ++i) {
         if (rs->envios[i].inicio == NULL) {
 
         } else {
-            rs->envios[i].actual = rs->envios[i].inicio->siguiente;
+            rs->actual = rs->envios[i].inicio->siguiente;
             rs->envios[i].anterior = rs->envios[i].inicio;
-            while (rs->envios[i].actual != NULL) {
-                rs->envios[i].anterior->siguiente = rs->envios[i].actual->siguiente;
-                free(rs->envios[i].actual);
-                rs->envios[i].actual = rs->envios[i].anterior->siguiente;
+            while (rs->actual != NULL) {
+                rs->envios[i].anterior->siguiente = rs->actual->siguiente;
+                free(rs->actual);
+                rs->actual = rs->envios[i].anterior->siguiente;
             }
             free(rs->envios[i].anterior);
             rs->envios[i].inicio = NULL;
@@ -147,37 +144,35 @@ void limpiars(RS *rs) {
     }
 }
 
-
+*/
 int bajaRS(RS *rs, Envio a) {
 
 
     int i;
-    Nodo *actual;
-    Nodo *anterior;
 
-    if (LocalizarRS(rs, &i, a.codigo, 1, actual, anterior) == 0)
+    if (LocalizarRS(rs, &i, a.codigo, 1) == 0)
         return 0;
 
-    if ((strcmp(rs->envios[i].actual->vipd.direccion, a.direccion) == 0) &&
-        (rs->envios[i].actual->vipd.dni_receptor == a.dni_receptor)
-        && (rs->envios[i].actual->vipd.dni_remitente == a.dni_remitente) &&
-        (strcmp(rs->envios[i].actual->vipd.fecha_envio, a.fecha_envio) == 0)
-        && (strcmp(rs->envios[i].actual->vipd.fecha_recepcion, a.fecha_recepcion) == 0) &&
-        (strcmp(rs->envios[i].actual->vipd.nombre, a.nombre) == 0)
-        && (strcmp(rs->envios[i].actual->vipd.nombre_r, a.nombre_r) == 0)) {
+    if ((strcmp(rs->actual->vipd.direccion, a.direccion) == 0) &&
+        (rs->actual->vipd.dni_receptor == a.dni_receptor)
+        && (rs->actual->vipd.dni_remitente == a.dni_remitente) &&
+        (strcmp(rs->actual->vipd.fecha_envio, a.fecha_envio) == 0)
+        && (strcmp(rs->actual->vipd.fecha_recepcion, a.fecha_recepcion) == 0) &&
+        (strcmp(rs->actual->vipd.nombre, a.nombre) == 0)
+        && (strcmp(rs->actual->vipd.nombre_r, a.nombre_r) == 0)) {
 
 
-        if (rs->envios[i].inicio == rs->envios[i].actual) {
-            rs->envios[i].inicio = rs->envios[i].actual->siguiente;
-            rs->envios[i].anterior = rs->envios[i].inicio;
+        if (rs->envios[i].inicio == rs->actual) {
+            rs->envios[i].inicio = rs->actual->siguiente;
+            rs->anterior = rs->envios[i].inicio;
 
 
         } else {
-            rs->envios[i].anterior->siguiente = rs->envios[i].actual->siguiente;
+            rs->anterior->siguiente = rs->actual->siguiente;
 
         }
-        free(rs->envios[i].actual);
-        rs->envios[i].actual = rs->envios[i].inicio;
+        free(rs->actual);
+        rs->actual = rs->envios[i].inicio;
         rs->cant--;
         return 1;
     } else
@@ -191,23 +186,22 @@ int evocarRS(RS *rs, Envio a, Envio *envios) {
         return 0;
 
     int pos;
-    Nodo *actual;
-    Nodo *anterior;
 
-    if (LocalizarRS(rs, &pos, a.codigo, 0, actual, anterior) == 0) {
+
+    if (LocalizarRS(rs, &pos, a.codigo, 0) == 0) {
 
         return 0;
     } else {
-
-        strcpy(envios->codigo, rs->envios[pos].actual->vipd.codigo);
-        envios->dni_remitente = rs->envios[pos].actual->vipd.dni_receptor;
-        strcpy(envios->nombre_r, rs->envios[pos].actual->vipd.nombre_r);
-        strcpy(envios->direccion, rs->envios[pos].actual->vipd.direccion);
-        envios->dni_remitente = rs->envios[pos].actual->vipd.dni_remitente;
-        strcpy(envios->nombre, rs->envios[pos].actual->vipd.nombre);
-        envios->dni_remitente = rs->envios[pos].actual->vipd.dni_remitente;
-        strcpy(envios->fecha_envio, rs->envios[pos].actual->vipd.fecha_envio);
-        strcpy(envios->fecha_recepcion, rs->envios[pos].actual->vipd.fecha_recepcion);
+        
+        strcpy(envios->codigo, rs->actual->vipd.codigo);
+        envios->dni_remitente = rs->actual->vipd.dni_receptor;
+        strcpy(envios->nombre_r, rs->actual->vipd.nombre_r);
+        strcpy(envios->direccion, rs->actual->vipd.direccion);
+        envios->dni_remitente = rs->actual->vipd.dni_remitente;
+        strcpy(envios->nombre, rs->actual->vipd.nombre);
+        envios->dni_remitente = rs->actual->vipd.dni_remitente;
+        strcpy(envios->fecha_envio, rs->actual->vipd.fecha_envio);
+        strcpy(envios->fecha_recepcion, rs->actual->vipd.fecha_recepcion);
 
         return 1;
     }

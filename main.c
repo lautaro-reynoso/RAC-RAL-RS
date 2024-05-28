@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <direct.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -69,8 +68,6 @@ int main() {
     initializeRAL(&ral);
     initializeRAC(&rac);
     initializeRS(&rs);
-
-    LecturaOperaciones(&rac, &ral, &rs);
     do {
         // Men� principal
 
@@ -81,7 +78,13 @@ int main() {
         scanf("%d", &opcion);
         switch (opcion) {
             case 1:
-                system("cls");
+
+                initializeRAL(&ral);
+                initializeRAC(&rac);
+                initializeRS(&rs);
+
+                LecturaOperaciones(&rac, &ral, &rs);
+
 
 
                 printf("\t Acum Ev.Ex | Max.Ev.Ex | Med.Ev.Ex |Acum Ev.Fr | Max.Ev.Fr | Med.Ev.Fr|\n");
@@ -96,6 +99,7 @@ int main() {
                        rs.costoEvoE, rs.eExMax, rs.eExMed, rs.costoEvoF, rs.eFrMax, rs.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
 
+                system("cls");
 
                 break;
             case 2:
@@ -161,20 +165,12 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
 
 
     // Obtener el directorio actual
-    if (_getcwd(cwd, sizeof(cwd)) == NULL) {
-        perror("Error al obtener el directorio actual");
-        return 1;
-    }
 
 
 
-
-    // Concatenar la ruta del archivo al directorio actual
-    char filepath[1024];
-    snprintf(filepath, sizeof(filepath), "%s\\%s", cwd, "/Operaciones-Envios.txt");
 
     // Intentar abrir el archivo en modo lectura
-    if ((fp = fopen(filepath, "r")) == NULL) {
+    if ((fp = fopen("/home/mateo/RAC-RAL-RS/Operaciones-Envios.txt", "r")) == NULL) {
         printf("No se pudo abrir el archivo\n");
         return 1;
     } else {

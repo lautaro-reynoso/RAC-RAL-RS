@@ -63,7 +63,7 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
         temp++;
     }
 
-    if ((cont < MAXRAC) && (stricmp(rac->envios[i].codigo, codigo) == 0)) { //EXITO
+    if ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, codigo) == 0)) { //EXITO
         (*pos) = i;
 
         if (k == 0) {
