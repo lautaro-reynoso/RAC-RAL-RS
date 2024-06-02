@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRAL 7 ///p=0.74  50/0.74 = 67.56 , techo(67.56) = 68
+#define MAXRAL 68 ///p=0.74  50/0.74 = 67.56 , techo(67.56) = 68
 
 
 //ESTRUCTURA

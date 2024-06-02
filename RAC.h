@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRAC 7//p=0.90
+#define MAXRAC 59//p=0.90
 
 typedef struct {
     Envio envios[MAXRAC];

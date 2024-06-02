@@ -6,34 +6,44 @@
 #include "RAL.h"
 #include "RS.h"
 #include "Envios.h"
+#include "direct.h"
 /*
- * Análisis Comparativo
-Rebalse Separado (RS)
+Comparación de Máximos y Medias
+Caso de Éxito
 
-Pros:
-Tiene la menor máxima y media evocación tanto en éxito como en fracaso.
-Esto sugiere que en promedio se consultan menos baldes, lo que se traduce en menores costos operativos.
-Cons:
-La estructura de rebalse separado puede ser más compleja de implementar y mantener.
-Rebalse Abierto Cuadrático (RAC)
+Máxima evocación exitosa:
+RS es el mejor con un máximo de 6.00.
+RAC es intermedio con un máximo de 27.00.
+RAL es el peor con un máximo de 58.00.
 
-Pros:
-Mejor media evocación exitosa (2.74) en comparación con RAL (3.67).
-Cons:
-La máxima evocación en fracaso (37.00) es muy alta, indicando potenciales operaciones costosas en casos extremos.
-Mayor media evocación en fracaso (13.71) en comparación con RAL (3.52) y RS (1.98).
-Rebalse Abierto Lineal (RAL)
+Media evocación exitosa:
+RS es el mejor con una media de 1.83.
+RAC es intermedio con una media de 3.49.
+RAL es el peor con una media de 3.96.
+Caso de Fracaso
 
-Pros:
-Tiene una máxima evocación en fracaso (6.00) considerablemente baja comparada con RAC.
-Media evocación en fracaso (3.52) es menor que RAC pero mayor que RS.
-Cons:
-Media y máxima evocación exitosa son mayores que las de RS y RAC en algunos casos, indicando mayor costo en operaciones exitosas.
+Máxima evocación fracaso:
+
+RS es el mejor con un máximo de 5.00.
+RAL es intermedio con un máximo de 33.00.
+RAC es el peor con un máximo de 59.00.
+
+Media evocación fracaso:
+RS es el mejor con una media de 2.00.
+RAC es intermedio con una media de 8.55.
+RAL es el peor con una media de 10.68.
+
 Conclusión
-En términos de eficiencia general (menor consulta de baldes en promedio y en casos extremos), el Rebalse Separado (RS) parece ser la opción más óptima y conveniente
- */
+La estructura RS (rebalse separado) es la mejor en ambos casos (éxito y fracaso), ya que tiene tanto la menor máxima evocación como la menor media evocación.
+
+RS (Rebalse Separado) debería ser preferida para minimizar los costos asociados a la cantidad de celdas consultadas, tanto en situaciones exitosas como en fracasos.
+RAC (Rebalse Abierto Cuadrático) podría considerarse como una opción intermedia.
+RAL (Rebalse Abierto Lineal) es la menos eficiente y debería ser evitada si se busca minimizar los costos en términos de celdas consultadas. */
 
 int LecturaOperaciones();
+
+
+
 
 char *Mayusculas();
 
@@ -71,7 +81,7 @@ int main() {
     do {
         // Men� principal
 
-        printf("1. Comparacion de estructuras\n");
+        printf("\n\n1. Comparacion de estructuras\n");
         printf("2. Mostrar Estructura\n");
         printf("3. Salir\n");
         printf("Seleccione una opcion: ");
@@ -165,12 +175,20 @@ int LecturaOperaciones(RAC *rac, RAL *ral, RS *rs) {
 
 
     // Obtener el directorio actual
+    if (_getcwd(cwd, sizeof(cwd)) == NULL) {
+        perror("Error al obtener el directorio actual");
+        return 1;
+    }
 
 
 
+
+    // Concatenar la ruta del archivo al directorio actual
+    char filepath[1024];
+    snprintf(filepath, sizeof(filepath), "%s\\%s", cwd, "../Operaciones-Envios.txt");
 
     // Intentar abrir el archivo en modo lectura
-    if ((fp = fopen("/home/mateo/RAC-RAL-RS/Operaciones-Envios.txt", "r")) == NULL) {
+    if ((fp = fopen(filepath, "r")) == NULL) {
         printf("No se pudo abrir el archivo\n");
         return 1;
     } else {

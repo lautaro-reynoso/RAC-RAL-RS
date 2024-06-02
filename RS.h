@@ -3,7 +3,7 @@
 
 #include "Envios.h"
 
-#define MAXRS 7
+#define MAXRS 31
 
 struct nodo {
     Envio vipd;
@@ -75,7 +75,6 @@ int LocalizarRS(RS *rs, int *j, char codigo[], int k) {
     if (rs->actual != NULL) {
         temp++;
         if (k == 0) {
-
 
             if (rs->eExMax < temp) {
                 rs->eExMax = temp;

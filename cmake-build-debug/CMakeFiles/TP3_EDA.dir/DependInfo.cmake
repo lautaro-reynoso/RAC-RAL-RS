@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/mateo/RAC-RAL-RS/main.c" "CMakeFiles/TP3_EDA.dir/main.c.o" "gcc" "CMakeFiles/TP3_EDA.dir/main.c.o.d"
+  "C:/Users/lautaro/OneDrive/Escritorio/RAC-RAL-RS/main.c" "CMakeFiles/TP3_EDA.dir/main.c.obj" "gcc" "CMakeFiles/TP3_EDA.dir/main.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

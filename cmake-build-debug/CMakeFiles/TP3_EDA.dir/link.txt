@@ -1,1 +1,3 @@
-/usr/bin/cc -g CMakeFiles/TP3_EDA.dir/main.c.o -o TP3_EDA 
+"C:\Program Files\JetBrains\CLion 2023.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\TP3_EDA.dir/objects.a
+C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\ar.exe qc CMakeFiles\TP3_EDA.dir/objects.a @CMakeFiles\TP3_EDA.dir\objects1.rsp
+C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\TP3_EDA.dir/objects.a -Wl,--no-whole-archive -o TP3_EDA.exe -Wl,--out-implib,libTP3_EDA.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\TP3_EDA.dir\linkLibs.rsp
