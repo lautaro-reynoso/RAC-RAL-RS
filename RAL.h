@@ -40,13 +40,22 @@ void initializeRAL(RAL *ral) {
 
 int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
     *pos = 0;
-    if (ral->cant == 0) {
-        return 0;
-    }
-
-
     int i, libre = -1, cont = 0, temp = 0;
     i = hashing(codigo, MAXRAL);
+
+    if (ral->cant == 0) {
+        if (p == 0) {
+            if (ral->eFrMax < temp) {
+                ral->eFrMax = temp;
+            }
+            ral->eFrCant++;
+            ral->costoEvoF += temp;
+            ral->eFrMed = ral->costoEvoF / (ral->eFrCant);
+        }
+        *pos = i;
+        return 0;
+    }
+    
   //  printf("Codigo: %s ---> hash: %d\n",codigo,i);
     //getchar();
 

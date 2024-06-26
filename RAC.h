@@ -37,13 +37,23 @@ void initializeRAC(RAC *rac) {
 
 int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
     *pos = 0;
+    int i = hashing(codigo, MAXRAC),temp = 0;
     if (rac->cant == 0) {
-        *pos = hashing(codigo, MAXRAC);
+
+        *pos = i;
+        if (k == 0) {
+            if (rac->eFrMax < temp) {
+                rac->eFrMax = temp;
+            }
+            rac->eFrCant++;
+            rac->costoEvoF += temp;
+            rac->eFrMed = rac->costoEvoF / (rac->eFrCant);
+        }
         return 0;
     }
 
 
-    int libre = -1, i = hashing(codigo, MAXRAC), cont = 0, p = 1, temp = 0;
+    int libre = -1, cont = 0, p = 1;
 
     while ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0) &&
            (strcmp(rac->envios[i].codigo, codigo) != 0)) {

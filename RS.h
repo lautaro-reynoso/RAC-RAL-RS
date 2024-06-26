@@ -18,7 +18,7 @@ typedef struct {
 typedef struct {
     lista_de_envios envios[MAXRS];
     int cant;
-    int indicador[MAXRS];
+
     Nodo *actual;
     Nodo *anterior;
     float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant, costoEvoE, costoEvoF, tempe, tempef;
@@ -59,7 +59,14 @@ int LocalizarRS(RS *rs, int *j, char codigo[], int k) {
     int i = hashing(codigo, MAXRS);
     (*j) = i;
     if (rs->envios[i].inicio == NULL) {
-
+        if (k == 0) {
+            if (rs->eFrMax < temp) {
+                rs->eFrMax = temp;
+            }
+            rs->eFrCant++;
+            rs->costoEvoF += temp;
+            rs->eFrMed = rs->costoEvoF / (rs->eFrCant);
+        }
         return 0;
     }
 
