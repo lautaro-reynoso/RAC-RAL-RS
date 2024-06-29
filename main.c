@@ -77,7 +77,7 @@ int main() {
 
     initializeRAL(&ral);
     initializeRAC(&rac);
-    initializeRS(&rs);
+    firtsInitializeRS(&rs);
     do {
         // Men� principal
 
@@ -89,9 +89,7 @@ int main() {
         switch (opcion) {
             case 1:
 
-                initializeRAL(&ral);
-                initializeRAC(&rac);
-                initializeRS(&rs);
+
 
                 LecturaOperaciones(&rac, &ral, &rs);
 
@@ -110,7 +108,9 @@ int main() {
                 printf("-----------------------------------------------------------------------------------------------\n");
 
                 system("cls");
-
+                initializeRAL(&ral);
+                initializeRAC(&rac);
+               // initializeRS(&rs);
                 break;
             case 2:
 

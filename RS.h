@@ -23,7 +23,15 @@ typedef struct {
     Nodo *anterior;
     float eExMax, eExMed, eFrMax, eFrMed, eExCant, eFrCant, costoEvoE, costoEvoF, tempe, tempef;
 } RS;
+void firtsInitializeRS (RS *rs){
 
+    int i;
+
+    for (i = 0; i < MAXRS; i++) {
+        rs->envios[i].inicio = NULL;
+    }
+
+}
 void initializeRS(RS *rs) {
     int i;
     for (i = 0; i < MAXRS; i++) {
