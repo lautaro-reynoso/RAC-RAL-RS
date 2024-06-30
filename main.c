@@ -7,6 +7,7 @@
 #include "RS.h"
 #include "Envios.h"
 #include "direct.h"
+
 /*
 Comparación de Máximos y Medias
 Caso de Éxito
@@ -41,8 +42,6 @@ RAC (Rebalse Abierto Cuadrático) podría considerarse como una opción intermed
 RAL (Rebalse Abierto Lineal) es la menos eficiente y debería ser evitada si se busca minimizar los costos en términos de celdas consultadas. */
 
 int LecturaOperaciones();
-
-
 
 
 char *Mayusculas();
@@ -90,9 +89,10 @@ int main() {
             case 1:
 
 
+                //initializeRAL(&ral);
+                //initializeRAC(&rac);
 
                 LecturaOperaciones(&rac, &ral, &rs);
-
 
 
                 printf("\t Acum Ev.Ex | Max.Ev.Ex | Med.Ev.Ex |Acum Ev.Fr | Max.Ev.Fr | Med.Ev.Fr|\n");
@@ -106,11 +106,9 @@ int main() {
                 printf("RS   ::  |     %.2f  |     %.2f    |   %.2f    |   %.2f     |   %.2f      |   %.2f    | \n",
                        rs.costoEvoE, rs.eExMax, rs.eExMed, rs.costoEvoF, rs.eFrMax, rs.eFrMed);
                 printf("-----------------------------------------------------------------------------------------------\n");
-
+                //printf(" %.2f,  %.2f",ral.eExCant,ral.eFrCant);
                 system("cls");
-                initializeRAL(&ral);
-                initializeRAC(&rac);
-               // initializeRS(&rs);
+
                 break;
             case 2:
 

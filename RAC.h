@@ -52,7 +52,6 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
         return 0;
     }
 
-
     int libre = -1, cont = 0, p = 1;
 
     while ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0) &&
@@ -73,11 +72,10 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
         temp++;
     }
 
-    if ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, codigo) == 0)) { //EXITO
+    if ((cont < MAXRAC) && (strcmp(rac->envios[i].codigo, VIRGEN) != 0)) { //EXITO
         (*pos) = i;
 
         if (k == 0) {
-
 
             if (rac->eExMax < temp) {
                 rac->eExMax = temp;
@@ -87,7 +85,6 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
             rac->costoEvoE += temp;
             rac->eExMed = rac->costoEvoE / (rac->eExCant);
         }
-
         return 1;
     } else if (cont < MAXRAC) {
 
@@ -100,7 +97,10 @@ int localizarRAC(RAC *rac, char codigo[], int *pos, int k) {
             rac->eFrMed = rac->costoEvoF / (rac->eFrCant);
         }
 
-
+        if (libre != -1) {
+            (*pos) = libre;
+            return 0;
+        }
 
         (*pos) = i;
         return 0;

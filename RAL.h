@@ -57,7 +57,6 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
     }
 
 
-
     while ((cont < MAXRAL) && (strcmp(ral->envios[i].codigo, VIRGEN) != 0) &&
            (strcmp(ral->envios[i].codigo, codigo) != 0)) {
         temp++;
@@ -80,7 +79,6 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
             if (ral->eExMax < temp) {
                 ral->eExMax = temp;
             }
-
             ral->eExCant++;
             ral->costoEvoE += temp;
             ral->eExMed = ral->costoEvoE / (ral->eExCant);
@@ -97,9 +95,13 @@ int localizarRAL(RAL *ral, char codigo[], int *pos, int p) {
             ral->eFrMed = ral->costoEvoF / (ral->eFrCant);
         }
 
+        if (libre != -1) {
+            (*pos) = libre;
+            return 0;//recorrio la estroctura encuentra una virgen y  devuelvo el primer libre
+        }
 
-            (*pos) = i;//recorrio y devuelvo el primer virgen
-            return 0;
+        (*pos) = i;//recorrio y devuelvo el primer virgen
+        return 0;
 
     } else {
         if (libre != -1) {
